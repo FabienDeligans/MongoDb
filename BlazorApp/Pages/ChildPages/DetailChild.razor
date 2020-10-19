@@ -1,0 +1,19 @@
+﻿@page "/detailChild/{ChildId}"
+@inject IModalService Modal
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <div><b>Child Id : </b>@Child.Id</div>
+            <div><b>Child FirstName : </b>@Child.FirstName</div>
+            <div><b>Child LastName : </b>@Child.LastName</div>
+            <div><b>Child Birthday : </b>@Child.Birthday.ToShortTimeString()</div>
+            <div><b>Child Age : </b>@Child.Age</div>
+            <div><b>Child FamilyId : </b>@Child.FamilyId</div>
+            <p></p>
+
+            <InscriptionComponent ChildId="@ChildId"></InscriptionComponent>
+
+        </div>
+    </div>
+</div>

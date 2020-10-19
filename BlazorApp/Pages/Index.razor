@@ -1,0 +1,74 @@
+﻿@page "/"
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="row">
+                <div class="col-md-12">
+                    <button type="submit" class="btn btn-danger" @onclick="Drop">Drop Database</button>
+                </div>
+            </div>
+
+            <div class="row"> <p></p> </div>
+
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="numberFamilyToCreate">
+                            Number of family to create
+                        </label>
+                        <input type="number" class="form-control" id="numberFamilyToCreate" @bind="NumberFamilyToCreate" />
+                    </div>
+                    <button type="submit" class="btn btn-primary" @onclick="CreateFamilies">
+                        Submit
+                    </button>
+                    <div>Family in database = @NumberFamilyInDatabase</div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="numberChildrenToCreate">
+                            Number of Children by Family to create
+                        </label>
+                        <input type="number" class="form-control" id="numberChildrenToCreate" @bind="NumberChildToCreateByFamily" />
+                    </div>
+                    <button type="submit" class="btn btn-primary" @onclick="CreateChildren">
+                        Submit
+                    </button>
+                    <div>Children in database = @NumberChildrenInDatabase</div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="numberParentToCreate">
+                            Number of Parent by Family to create
+                        </label>
+                        <input type="number" class="form-control" id="numberParentToCreate" @bind="NumberParentToCreateByFamily" />
+                    </div>
+                    <button type="submit" class="btn btn-primary" @onclick="CreateParents">
+                        Submit
+                    </button>
+                    <div>Parents in database = @NumberParentInDatabase</div>
+                </div>
+            </div>
+
+            <div class="row"> <p></p> </div>
+
+            <div class="row">
+                <div class="col-md-4"></div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="numberInscriptionToCreate">
+                            Number of Inscription by Child to create
+                        </label>
+                        <input type="number" class="form-control" id="numberInscriptionToCreate" @bind="NumberInscriptionToCreateByChild" />
+                    </div>
+                    <button type="submit" class="btn btn-primary" @onclick="CreateInscription">
+                        Submit
+                    </button>
+                    <div>Inscription in database = @NumberInscriptionInDatabase</div>
+                </div>
+                <div class="col-md-4"></div>
+            </div>
+
+        </div>
+    </div>
+</div>

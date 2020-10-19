@@ -1,0 +1,89 @@
+﻿@page "/Families"
+@inject IModalService Modal
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-6">
+            Number of Family in Database : @Families.Count
+        </div>
+        <div>
+            <button type="button" class="btn btn-primary" @onclick="@Create">Insert</button>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div><h4>List Family</h4></div>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>
+                            #
+                        </th>
+                        <th>
+                            Family Name
+                        </th>
+                        <th>
+                            Detail
+                        </th>
+                        <th>
+                            Edit
+                        </th>
+                        <th>
+                            Remove
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var family in PaginatedFamily)
+                    {
+                        <tr>
+                            <td>
+                                @family.Id
+                            </td>
+                            <td>
+                                @family.FamilyName
+                            </td>
+                            <td>
+                                <button type="button" class="btn btn-info" @onclick="@(() => Detail(family.Id))">Detail</button>
+                            </td>
+                            <td>
+                                <button type="button" class="btn btn-info" @onclick="@(() => Edit(family.Id))">Edit</button>
+                            </td>
+                            <td>
+                                <button type="button" class="btn btn-info" @onclick="@(() => Delete(family.Id))">Remove</button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div>
+        <nav>
+            <ul class="pagination">
+                <li class="page-item">
+                    <button class="page-link" @onclick="(() => Pagination(1))">First</button>
+                </li>
+                <li class="page-item">
+                    @{var p = Index - 1 <= 0 ? 1 : Index - 1; }
+                    <button class="page-link" @onclick="(() => Pagination(p))">...</button>
+                </li>
+
+                @for (var i = (Index - 3 < 0 ? 1 : Index - 3); i <= (Index + 3 >= NumberOfPage ? NumberOfPage : Index + 3); i++)
+                {
+                    <li class="page-item">
+                        @{var y = i; }
+                        <button class="page-link" @onclick="(() => Pagination(y))" style="background-color: @(i == Index ? "blue" : null)">@i</button>
+                    </li>
+                }
+                <li class="page-item">
+                    @{var n = Index + 1 >= NumberOfPage ? NumberOfPage : Index + 1;}
+                    <button class="page-link" @onclick="(() => Pagination(n))">...</button>
+                </li>
+                <li class="page-item">
+                    <button class="page-link" @onclick="(() => Pagination(NumberOfPage))">Last</button>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</div>

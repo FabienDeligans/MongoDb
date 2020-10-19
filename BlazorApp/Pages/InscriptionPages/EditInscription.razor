@@ -1,0 +1,55 @@
+﻿@page "/editInsction/{InscriptionId}"
+@page "/newInscription"
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+
+            <div class="form-group">
+                <label for="id">
+                    Id
+                </label>
+                <input type="text" class="col-12" id="id" value="@Inscription.Id" disabled="disabled" />
+            </div>
+
+            <div class="form-group">
+                <label for="Family">
+                    Family
+                </label>
+
+                <select class="custom-select" @bind="Inscription.ChildId" id="Child">
+                    <option disabled="disabled" style="background-color: yellow">Choisir un enfant</option>
+                    @foreach (var child in Children)
+                    {
+                        <option value="@child.Id">@child.CompleteName</option>
+                    }
+
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="DayChoose">Day Choose</label>
+                <input type="date" id="DayChoose" @bind="@Inscription.DayChoose" @bind:format="dd-MM-yyyy"/>
+            </div>
+
+            <div class="form-group">
+                <label for="matin">Matin</label>
+                <input type="checkbox" id="matin" @bind="@Inscription.M" />
+            </div>
+
+            <div class="form-group">
+                <label for="repas">Repas</label>
+                <input type="checkbox" id="repas" @bind="@Inscription.R" />
+            </div>
+
+            <div class="form-group">
+                <label for="am">Après Midi</label>
+                <input type="checkbox" id="am" @bind="@Inscription.Am" />
+            </div>
+
+            <button class="btn btn-primary" @onclick="Save">Submit</button>
+            <button class="btn btn-danger" @onclick="Cancel">Cancel</button>
+
+        </div>
+    </div>
+</div>

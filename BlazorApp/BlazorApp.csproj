@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <UserSecretsId>2adbd2ba-fb78-4123-a236-493ac1d1ec44</UserSecretsId>
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Blazored.Modal" Version="5.1.0" />
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.10.9" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\MongoDbCore\MongoDbCore.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Pages\ChildPages\" />
+    <Folder Include="Pages\InscriptionPages\" />
+    <Folder Include="Pages\ParentPages\" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,21 @@
+﻿@page "/detailInscription/{InscriptionId}"
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <div><b>Inscription Id : @Inscription.Id</b></div>
+            <div><b>Inscription Day choose : @Inscription.DayChoose</b></div>
+
+            <label name="m">M</label>
+            <input name="m" type="checkbox" disabled checked="@Inscription.M" />
+
+            <label name="r">R</label>
+            <input name="r" type="checkbox" disabled checked="@Inscription.R" />
+
+            <label name="am">Am</label>
+            <input name="am" type="checkbox" disabled checked="@Inscription.Am" />
+
+            <div><b>Inscription ChildId : @Inscription.ChildId</b></div>
+        </div>
+    </div>
+</div>

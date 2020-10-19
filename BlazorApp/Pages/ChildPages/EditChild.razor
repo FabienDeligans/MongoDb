@@ -1,0 +1,56 @@
+﻿@page "/editChild/{ChildId}"
+@page "/newChild"
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+
+            <div class="form-group">
+                <label for="id">
+                    Id
+                </label>
+                <input type="text" class="col-12" id="id" value="@Child.Id" disabled="disabled" />
+            </div>
+
+            <div class="form-group">
+                <label for="FirstName">
+                    FirstName
+                </label>
+                <input type="text" class="col-12" id="FirstName" @bind="@Child.FirstName" />
+            </div>
+
+            <div class="form-group">
+                <label for="lastName">
+                    LastName
+                </label>
+                <input type="text" class="col-12" id="lastName" @bind="@Child.LastName" />
+            </div>
+
+            <div class="form-group">
+                <label for="Birthday">
+                    Birthday
+                </label>
+                <input type="date" class="col-12" id="Birthday" @bind="@Child.Birthday" />
+            </div>
+
+            <div class="form-group">
+                <label for="Family">
+                    Family
+                </label>
+
+                <select class="custom-select" @bind="Child.FamilyId" id="Family">
+                    <option disabled="disabled" style="background-color: yellow">Choisir une famille</option>
+                    @foreach (var family in Families)
+                    {
+                        <option value="@family.Id">@family.FamilyName</option>
+                    }
+
+                </select>
+            </div>
+
+            <button class="btn btn-primary" @onclick="Save">Submit</button>
+            <button class="btn btn-danger" @onclick="Cancel">Cancel</button>
+
+        </div>
+    </div>
+</div>

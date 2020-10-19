@@ -1,0 +1,97 @@
+﻿@page "/parentsPage"
+@using MongoDbCore.Models
+@inject IModalService Modal
+
+<div class="container-fluid">
+    @if (FamilyId == null)
+    {
+        <div class="row">
+            <div class="col-md-6">
+                Number of Parents in Database : @Parents.Count
+            </div>
+            <div>
+                <button type="button" class="btn btn-primary" @onclick="@Create">Insert</button>
+            </div>
+        </div>
+    }
+    <div><h4>List Parent</h4></div>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Parent FirstName</th>
+                <th>Parent LastName</th>
+                <th>Parent Adress</th>
+                <th>Parent Cp</th>
+                <th>Parent City</th>
+                @if (FamilyId == null)
+                {
+                    <th>
+                        Detail
+                    </th>
+                    <th>
+                        Edit
+                    </th>
+                    <th>
+                        Remove
+                    </th>
+                }
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var parent in PaginatedParent)
+            {
+                <tr>
+                    <td>@parent.FirstName</td>
+                    <td>@parent.LastName</td>
+                    <td>@parent.Adress</td>
+                    <td>@parent.Cp</td>
+                    <td>@parent.City</td>
+                    @if (FamilyId == null)
+                    {
+                        <td>
+                            <button type="button" class="btn btn-info" @onclick="@(() => Detail(parent.Id))">Detail</button>
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-info" @onclick="@(() => Edit(parent.Id))">Edit</button>
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-info" @onclick="@(() => Delete(parent.Id))">Remove</button>
+                        </td>
+                    }
+                </tr>
+            }
+        </tbody>
+    </table>
+    @if (FamilyId == null)
+    {
+        <div>
+            <nav>
+                <ul class="pagination">
+                    <li class="page-item">
+                        <button class="page-link" @onclick="(() => Pagination(1))">First</button>
+                    </li>
+                    <li class="page-item">
+                        @{var p = Index - 1 <= 0 ? 1 : Index - 1; }
+                        <button class="page-link" @onclick="(() => Pagination(p))">...</button>
+                    </li>
+
+                    @for (var i = (Index - 3 < 0 ? 1 : Index - 3); i <= (Index + 3 >= NumberOfPage ? NumberOfPage : Index + 3); i++)
+                    {
+                        <li class="page-item">
+                            @{var y = i; }
+                            <button class="page-link" @onclick="(() => Pagination(y))" style="background-color: @(i == Index ? "blue" : null)">@i</button>
+                        </li>
+                    }
+                    <li class="page-item">
+                        @{var n = Index + 1 >= NumberOfPage ? NumberOfPage : Index + 1;}
+                        <button class="page-link" @onclick="(() => Pagination(n))">...</button>
+                    </li>
+                    <li class="page-item">
+                        <button class="page-link" @onclick="(() => Pagination(NumberOfPage))">Last</button>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    }
+
+</div>
