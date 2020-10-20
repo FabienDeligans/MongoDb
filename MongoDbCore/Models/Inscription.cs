@@ -1,9 +1,11 @@
 ﻿using System;
+using MongoDB.Bson.Serialization.Attributes;
 
 namespace MongoDbCore.Models
 {
     public class Inscription : Entity
     {
+        [BsonDateTimeOptions(Kind = DateTimeKind.Local)]
         public DateTime DayChoose { get; set; }
 
         public string ChildId { get; set; }

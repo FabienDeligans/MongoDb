@@ -48,6 +48,7 @@ namespace BlazorApp.Pages.InscriptionPages
             }
             else
             {
+                Inscription.DayChoose = Inscription.DayChoose.Date.ToUniversalTime();
                 if (Edit == true)
                 {
                     inscriptionController.ReplaceOne(Inscription);

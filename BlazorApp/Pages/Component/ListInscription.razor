@@ -1,0 +1,54 @@
+﻿@page "/inscriptionPage"
+@page "/inscriptionPage/{ChildId}"
+@inject IModalService Modal
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-6">
+
+            @if (ChildId != null)
+            {
+                <div>
+                    Child : @Child.CompleteName
+                </div>
+                <div>
+                    Number of Inscription for This Child : @Inscriptions.Count()
+                </div>
+            }
+            else
+            {
+                <div>
+                    @*Number of Inscription in Database : @Inscriptions.Count*@
+                </div>
+            }
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-2">
+            <button type="button" class="btn btn-primary" @onclick="@Create">Insert</button>
+        </div>
+        <div class="col-md-4">
+            <div class="input-group">
+                <input type="date" @bind="@Date" />
+                <button type="button" class="btn btn-primary" @onclick="@SearchByDate">Search By Date</button>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="input-group">
+                <select class="custom-select" @bind="ChildIdSearch" id="Child">
+                    <option disabled="disabled" style="background-color: red">Choisir un enfant</option>
+                    @foreach (var child in Children)
+                    {
+                        <option value="@child.Id">@child.CompleteName</option>
+                    }
+                </select>
+                <button type="button" class="btn btn-primary" @onclick="@SearchByChild">Search By Child</button>
+            </div>
+        </div>
+    </div>
+    <div><h4>List Inscriptions</h4></div>
+</div>
+@if (Inscriptions != null)
+{
+    <InscriptionComponent Inscriptions="@Inscriptions"></InscriptionComponent>
+}

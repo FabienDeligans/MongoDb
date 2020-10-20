@@ -14,11 +14,9 @@ namespace BlazorApp.Pages.Component
     public partial class InscriptionComponent
     {
         [Parameter]
-        public string ChildId { get; set; }
-
-        public Child Child { get; set; }
-
         public List<Inscription> Inscriptions { get; set; }
+
+        public List<Child> Children { get; set; }
 
         public PaginatedList<Inscription> PaginatedInscription { get; set; }
 
@@ -26,25 +24,31 @@ namespace BlazorApp.Pages.Component
         public int PageSize { get; set; } = 10;
         public int NumberOfPage { get; set; }
 
+        public int MCount { get; set; }
+        public int RCount { get; set; }
+        public int AmCount { get; set; }
+
+
+        protected override void OnParametersSet()
+        {
+            base.OnParametersSet();
+            OnInitialized();
+        }
+
         protected override void OnInitialized()
         {
             base.OnInitialized();
-            var inscriptionController = new BaseController<Inscription>();
             var childController = new BaseController<Child>();
-
-            if (ChildId != null)
-            {
-                Child = childController.QueryCollection().First(v => v.Id == ChildId);
-                Inscriptions = inscriptionController.QueryCollection().Where(v => v.ChildId == ChildId).ToList();
-            }
-            else
-            {
-                Inscriptions = inscriptionController.QueryCollection().ToList();
-            }
 
             NumberOfPage = (int)Math.Ceiling(Inscriptions.Count / (double)PageSize); ;
             Index = 1;
             PaginatedInscription = PaginatedList<Inscription>.Create(Inscriptions, Index, PageSize);
+
+            MCount = Inscriptions.Count(v => v.M == true);
+            RCount = Inscriptions.Count(v => v.R == true);
+            AmCount = Inscriptions.Count(v => v.Am == true);
+
+            Children = childController.QueryCollection().ToList();
         }
 
         public async Task Detail(string id)
@@ -61,17 +65,6 @@ namespace BlazorApp.Pages.Component
             parameters.Add(nameof(EditInscription.InscriptionId), id);
 
             var modalForm = Modal.Show<EditInscription>("Edit this Inscription", parameters);
-            var result = await modalForm.Result;
-
-            if (!result.Cancelled)
-            {
-                OnInitialized();
-            }
-        }
-
-        public async Task Create()
-        {
-            var modalForm = Modal.Show<EditInscription>("Insert new Inscription");
             var result = await modalForm.Result;
 
             if (!result.Cancelled)

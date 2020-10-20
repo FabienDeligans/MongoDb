@@ -15,7 +15,7 @@
         </div>
     }
     <div><h4>List Children</h4></div>
-    <table class="table table-striped">
+    <table class="table table-sm">
         <thead>
             <tr>
                 <th>Child FirstName</th>
@@ -38,7 +38,7 @@
                 <tr>
                     <td>@child.FirstName</td>
                     <td>@child.LastName</td>
-                    <td>@child.Birthday.ToShortDateString()</td>
+                    <td>@child.Birthday.ToLocalTime().ToShortDateString()</td>
                     <td>@child.Age</td>
                     <td>@child.CompleteName</td>
                     @if (FamilyId == null)

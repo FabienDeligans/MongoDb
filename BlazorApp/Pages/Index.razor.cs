@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using MongoDB.Driver;
 using MongoDbCore.Controller;
 using MongoDbCore.Data;
 using MongoDbCore.Models;
@@ -25,6 +26,10 @@ namespace BlazorApp.Pages
         public int NumberInscriptionToCreateByChild { get; set; }
         public int NumberInscriptionInDatabase { get; set; }
 
+        public DateTime DateUTC { get; set; }
+        public DateTime DateLOC { get; set; }
+
+
         protected override void OnInitialized()
         {
             base.OnInitialized();
@@ -44,6 +49,7 @@ namespace BlazorApp.Pages
             var inscriptionController = new BaseController<Inscription>();
             Inscriptions = inscriptionController.QueryCollection().ToList();
             NumberInscriptionInDatabase = Inscriptions.Count;
+
         }
 
         public void Drop()
@@ -129,7 +135,7 @@ namespace BlazorApp.Pages
             InvokeAsync(StateHasChanged);
         }
 
-        public void CreateInscription()
+        public async void CreateInscription()
         {
             var inscriptionController = new BaseController<Inscription>();
             var childController = new BaseController<Child>();
@@ -142,7 +148,7 @@ namespace BlazorApp.Pages
                     var inscription = new Inscription
                     {
                         ChildId = child.Id,
-                        DayChoose = new DateTime(2020, 10, 15),
+                        DayChoose = DateTime.Now.Date + TimeSpan.FromDays(i),
                         M = true,
                         Am = true,
                         R = true
@@ -154,7 +160,13 @@ namespace BlazorApp.Pages
 
             Inscriptions = inscriptionController.QueryCollection().ToList();
             NumberInscriptionInDatabase = Inscriptions.Count;
-            InvokeAsync(StateHasChanged);
+            await InvokeAsync(StateHasChanged);
+
+            using var context = new Context<Inscription>();
+            var indexKeysDefinition = Builders<Inscription>.IndexKeys.Ascending(v => v.ChildId);
+            var indexKeysDefinition2 = Builders<Inscription>.IndexKeys.Ascending(v => v.DayChoose);
+            await context.Collection.Indexes.CreateOneAsync(new CreateIndexModel<Inscription>(indexKeysDefinition));
+            await context.Collection.Indexes.CreateOneAsync(new CreateIndexModel<Inscription>(indexKeysDefinition2));
         }
     }
 }
