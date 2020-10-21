@@ -14,6 +14,9 @@ namespace BlazorApp.Pages.Component
     public partial class InscriptionComponent
     {
         [Parameter]
+        public string ChildId { get; set; }
+        public Child Child { get; set; }
+
         public List<Inscription> Inscriptions { get; set; }
 
         public List<Child> Children { get; set; }
@@ -28,6 +31,9 @@ namespace BlazorApp.Pages.Component
         public int RCount { get; set; }
         public int AmCount { get; set; }
 
+        public bool FromSearchByDate { get; set; }
+        public bool FromSearchByChild { get; set; }
+
 
         protected override void OnParametersSet()
         {
@@ -35,23 +41,23 @@ namespace BlazorApp.Pages.Component
             OnInitialized();
         }
 
+
         protected override void OnInitialized()
         {
             base.OnInitialized();
             var childController = new BaseController<Child>();
 
-            NumberOfPage = (int)Math.Ceiling(Inscriptions.Count / (double)PageSize); ;
-            Index = 1;
-            PaginatedInscription = PaginatedList<Inscription>.Create(Inscriptions, Index, PageSize);
-
-            MCount = Inscriptions.Count(v => v.M == true);
-            RCount = Inscriptions.Count(v => v.R == true);
-            AmCount = Inscriptions.Count(v => v.Am == true);
+            if (ChildId != null)
+            {
+                FromSearchByChild = true; 
+                SearchByChild();
+                InvokeAsync(StateHasChanged);
+            }
 
             Children = childController.QueryCollection().ToList();
         }
 
-        public async Task Detail(string id)
+        public void Detail(string id)
         {
             var parameters = new ModalParameters();
             parameters.Add(nameof(DetailInscription.InscriptionId), id);
@@ -69,7 +75,16 @@ namespace BlazorApp.Pages.Component
 
             if (!result.Cancelled)
             {
-                OnInitialized();
+                if (FromSearchByDate)
+                {
+                    SearchByDate();
+                }
+
+                if (FromSearchByChild)
+                {
+                    SearchByChild();
+                }
+                await InvokeAsync(StateHasChanged);
             }
         }
 
@@ -87,11 +102,58 @@ namespace BlazorApp.Pages.Component
             }
         }
 
-        public void Pagination(int nb)
+        public void Pagination(int index)
         {
-            Index = nb;
+            Index = index;
+            NumberOfPage = (int)Math.Ceiling(Inscriptions.Count / (double)PageSize); 
             PaginatedInscription = PaginatedList<Inscription>.Create(Inscriptions, Index, PageSize);
+
+            MCount = Inscriptions.Count(v => v.M );
+            RCount = Inscriptions.Count(v => v.R );
+            AmCount = Inscriptions.Count(v => v.Am );
             StateHasChanged();
         }
+
+        public async Task Create()
+        {
+            var modalForm = Modal.Show<EditInscription>("Insert new Inscription");
+            var result = await modalForm.Result;
+
+            if (!result.Cancelled)
+            {
+                OnInitialized();
+                await InvokeAsync(StateHasChanged);
+            }
+        }
+
+        public void SearchByDate()
+        {
+            var inscriptionController = new BaseController<Inscription>();
+            Inscriptions = inscriptionController.QueryCollection().Where(v => v.DayChoose == Date.Date).OrderBy(v => v.DayChoose).ToList();
+            ChildId = null;
+            Pagination(1);
+            FromSearchByDate = true;
+            FromSearchByChild = false;
+            InvokeAsync(StateHasChanged);
+        }
+
+        public void SearchByChild()
+        {
+            ChildId = ChildIdSearch ?? ChildId ;
+
+            if(ChildId == null) return;
+
+            var childController = new BaseController<Child>();
+            Child = childController.QueryCollection().First(v => v.Id == ChildId); 
+            var inscriptionController = new BaseController<Inscription>();
+            Inscriptions = inscriptionController.QueryCollection().Where(v => v.ChildId == ChildId).OrderBy(v => v.DayChoose).ToList();
+            Pagination(1);
+            FromSearchByChild = true;
+            FromSearchByDate = false;
+            InvokeAsync(StateHasChanged);
+        }
+
+        public string ChildIdSearch { get; set; }
+        public DateTime Date { get; set; } = DateTime.Now;
     }
 }

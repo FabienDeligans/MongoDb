@@ -19,6 +19,7 @@ namespace BlazorApp.Pages.ChildPages
 
         [CascadingParameter]
         public BlazoredModalInstance BlazoredModal { get; set; }
+
         protected override void OnInitialized()
         {
             base.OnInitialized();
@@ -41,23 +42,17 @@ namespace BlazorApp.Pages.ChildPages
         {
             var childController = new BaseController<Child>();
 
-            if (Child.FamilyId == null)
+            if (Child.FamilyId == null) return;
+            if (Edit)
             {
-                StateHasChanged();
+                childController.ReplaceOne(Child);
             }
             else
             {
-                if (Edit == true)
-                {
-                    childController.ReplaceOne(Child);
-                }
-                else
-                {
-                    childController.Insert(Child);
-                }
-                
-                BlazoredModal.Close();
+                childController.Insert(Child);
             }
+                
+            BlazoredModal.Close();
         }
 
         private void Cancel()

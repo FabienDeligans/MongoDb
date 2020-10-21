@@ -30,12 +30,12 @@ namespace BlazorApp.Pages.Component
             base.OnInitialized();
             var childController = new BaseController<Child>();
             Children = FamilyId != null ? childController.QueryCollection().Where(v => v.FamilyId == FamilyId).ToList() : childController.QueryCollection().ToList();
-            NumberOfPage = (int)Math.Ceiling(Children.Count / (double)PageSize); ;
+            NumberOfPage = (int)Math.Ceiling(Children.Count / (double)PageSize); 
             Index = 1;
             PaginatedChild = PaginatedList<Child>.Create(Children, Index, PageSize);
         }
 
-        public async Task Detail(string id)
+        public void Detail(string id)
         {
             var parameters = new ModalParameters();
             parameters.Add(nameof(DetailChild.ChildId), id);

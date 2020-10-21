@@ -25,9 +25,7 @@ namespace BlazorApp.Pages.ParentPages
 
         public void Yes()
         {
-            
             var parentController = new BaseController<Parent>();
-
             parentController.RemoveAll(v => v.Id == ParentId);
 
             BlazoredModal.Close();

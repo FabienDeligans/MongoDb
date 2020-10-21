@@ -103,7 +103,7 @@ namespace MongoDbCore.Controller
         }
 
         /// <summary>
-        /// Met à jour les entités qui ont une propriété de type IEnumerable<T>
+        /// Met à jour les entités qui ont une propriété de type IEnumerable
         /// qui contient l'entité en parametre. 
         /// </summary>
         /// <param name="entity"></param>

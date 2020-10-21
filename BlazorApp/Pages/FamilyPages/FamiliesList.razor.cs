@@ -26,12 +26,12 @@ namespace BlazorApp.Pages.FamilyPages
             var familyController = new BaseController<Family>();
             Families = familyController.QueryCollection().ToList();
 
-            NumberOfPage = (int)Math.Ceiling(Families.Count / (double)PageSize); ;
+            NumberOfPage = (int)Math.Ceiling(Families.Count / (double)PageSize); 
             Index = 1;
             PaginatedFamily = PaginatedList<Family>.Create(Families, Index, PageSize);
         }
 
-        public async Task Detail(string id)
+        public void Detail(string id)
         {
             var parameters = new ModalParameters();
             parameters.Add(nameof(DetailFamily.Id), id);

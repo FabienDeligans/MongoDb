@@ -42,23 +42,17 @@ namespace BlazorApp.Pages.ParentPages
         public void Save()
         {
             var parentController = new BaseController<Parent>();
-            if (Parent.FamilyId == null)
+            if (Parent.FamilyId == null) return;
+            if (Edit )
             {
-                StateHasChanged();
+                parentController.ReplaceOne(Parent);
             }
             else
             {
-                if (Edit == true)
-                {
-                    parentController.ReplaceOne(Parent);
-                }
-                else
-                {
-                    parentController.Insert(Parent);
-                }
-
-                BlazoredModal.Close();
+                parentController.Insert(Parent);
             }
+
+            BlazoredModal.Close();
         }
         private void Cancel()
         {

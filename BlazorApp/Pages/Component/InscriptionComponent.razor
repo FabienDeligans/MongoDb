@@ -1,62 +1,127 @@
-﻿@inject IModalService Modal
+﻿@page "/inscriptionPage"
+@page "/inscriptionPage/{ChildId}"
+@inject IModalService Modal
 
-<table class="table table-sm">
-    <thead>
-        <tr>
-            <th>DayChoose</th>
-            <th>M <div>@MCount</div></th>
-            <th>R <div>@RCount</div></th>
-            <th>Am <div>@AmCount</div></th>
-            <th>Child</th>
-            <th>Detail</th>
-            <th>Edit</th>
-            <th>Remove</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var inscription in PaginatedInscription)
-        {
-            <tr>
-                <td>@inscription.DayChoose.ToShortDateString()</td>
-                <td><input type="checkbox" disabled checked="@inscription.M" /></td>
-                <td><input type="checkbox" disabled checked="@inscription.R" /></td>
-                <td><input type="checkbox" disabled checked="@inscription.Am" /></td>
-                <td>@inscription.ChildId</td>
-                <td><button type="button" class="btn btn-info" @onclick="@(() => Detail(inscription.Id))">Detail</button></td>
-                <td><button type="button" class="btn btn-info" @onclick="@(() => Edit(inscription.Id))">Edit</button></td>
-                <td><button type="button" class="btn btn-info" @onclick="@(() => Delete(inscription.Id))">Remove</button></td>
-            </tr>
-        }
-    </tbody>
-</table>
-@if (Inscriptions.Count() >= 2)
-{
-    <div>
-        <nav>
-            <ul class="pagination">
-                <li class="page-item">
-                    <button class="page-link" @onclick="(() => Pagination(1))">First</button>
-                </li>
-                <li class="page-item">
-                    @{var p = Index - 1 <= 0 ? 1 : Index - 1; }
-                    <button class="page-link" @onclick="(() => Pagination(p))">...</button>
-                </li>
-
-                @for (var i = (Index - 3 < 0 ? 1 : Index - 3); i <= (Index + 3 >= NumberOfPage ? NumberOfPage : Index + 3); i++)
-                {
-                    <li class="page-item">
-                        @{var y = i; }
-                        <button class="page-link" @onclick="(() => Pagination(y))" style="background-color: @(i == Index ? "blue" : null)">@i</button>
-                    </li>
-                }
-                <li class="page-item">
-                    @{var n = Index + 1 >= NumberOfPage ? NumberOfPage : Index + 1;}
-                    <button class="page-link" @onclick="(() => Pagination(n))">...</button>
-                </li>
-                <li class="page-item">
-                    <button class="page-link" @onclick="(() => Pagination(NumberOfPage))">Last</button>
-                </li>
-            </ul>
-        </nav>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-3">
+            <div class="input-group">
+                <input type="date" @bind="@Date" />
+                <button type="button" class="btn btn-primary" @onclick="@SearchByDate">Search By Date</button>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="input-group">
+                <select class="custom-select" @bind="ChildIdSearch" id="Child">
+                    <option disabled="disabled" style="background-color: red">Choisir un enfant</option>
+                    @foreach (var child in Children)
+                    {
+                        <option value="@child.Id">@child.CompleteName</option>
+                    }
+                </select>
+                <button type="button" class="btn btn-primary" @onclick="@SearchByChild">Search By Child</button>
+            </div>
+        </div>
+        <div class="col-md-6" align="right">
+            <button type="button" class="btn btn-primary" @onclick="@Create">Insert</button>
+        </div>
     </div>
+    <div><p></p></div>
+    <div class="row">
+        <div class="col-md-12">
+            @if (FromSearchByChild)
+            {
+                <div align="center"><h2><b>Inscriptions for : @Child.CompleteName</b></h2></div>
+                <div align="center"><b>Number of Inscription for This Child : @Inscriptions.Count()</b></div>
+            }
+            @if (FromSearchByDate)
+            {
+                <div align="center"><h2><b>Inscriptions for : @Date.Date.ToLongDateString()</b></h2></div>
+                <div align="center"><b>Number of Inscription for This Data : @Inscriptions.Count()</b></div>
+            }
+            <p></p>
+        </div>
+    </div>
+</div>
+@if (Inscriptions != null)
+{
+    <table class="table table-sm">
+        <thead>
+            <tr>
+                <th>
+                    <div align="center">DayChoose</div>
+                </th>
+                <th>
+                    <div align="center">M</div>
+                    <div align="center">@MCount</div>
+                </th>
+                <th>
+                    <div align="center">R</div>
+                    <div align="center">@RCount</div>
+                </th>
+                <th>
+                    <div align="center">Am</div>
+                    <div align="center">@AmCount</div>
+                </th>
+                <th>
+                    <div align="center">Child</div>
+                </th>
+                <th>
+                    <div align="center">Detail</div>
+                </th>
+                <th>
+                    <div align="center">Edit</div>
+                </th>
+                <th>
+                    <div align="center">Remove</div>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var inscription in PaginatedInscription)
+            {
+                <tr>
+                    <td><div align="center">@inscription.DayChoose.ToShortDateString()</div></td>
+                    <td><div align="center"><input type="checkbox" disabled checked="@inscription.M" /></div></td>
+                    <td><div align="center"><input type="checkbox" disabled checked="@inscription.R" /></div></td>
+                    <td><div align="center"><input type="checkbox" disabled checked="@inscription.Am" /></div></td>
+                    <td><div align="center">@Children.First(v => v.Id == inscription.ChildId).CompleteName</div></td>
+                    <td><div align="center"><button type="button" class="btn btn-info" @onclick="@(() => Detail(inscription.Id))">Detail</button></div></td>
+                    <td><div align="center"><button type="button" class="btn btn-info" @onclick="@(() => Edit(inscription.Id))">Edit</button></div></td>
+                    <td><div align="center"><button type="button" class="btn btn-info" @onclick="@(() => Delete(inscription.Id))">Remove</button></div></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    @if (Inscriptions.Count() >= 2)
+    {
+        <div>
+            <nav>
+                <ul class="pagination">
+                    <li class="page-item">
+                        <button class="page-link" @onclick="(() => Pagination(1))">First</button>
+                    </li>
+                    <li class="page-item">
+                        @{ var p = Index - 1 <= 0 ? 1 : Index - 1; }
+                        <button class="page-link" @onclick="(() => Pagination(p))">...</button>
+                    </li>
+
+                    @for (var i = (Index - 3 < 0 ? 1 : Index - 3); i <= (Index + 3 >= NumberOfPage ? NumberOfPage : Index + 3); i++)
+                    {
+                        <li class="page-item">
+                            @{ var y = i; }
+                            <button class="page-link" @onclick="(() => Pagination(y))" style="background-color: @(i == Index ? "blue" : null)">@i</button>
+                        </li>
+                    }
+                    <li class="page-item">
+                        @{ var n = Index + 1 >= NumberOfPage ? NumberOfPage : Index + 1; }
+                        <button class="page-link" @onclick="(() => Pagination(n))">...</button>
+                    </li>
+                    <li class="page-item">
+                        <button class="page-link" @onclick="(() => Pagination(NumberOfPage))">Last</button>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    }
 }

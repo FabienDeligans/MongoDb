@@ -34,24 +34,19 @@ namespace BlazorApp.Pages.FamilyPages
         public void Save()
         {
             var familyController = new BaseController<Family>();
-            if (Family.FamilyName == null)
+            if (Family.FamilyName == null) return;
+            if (Edit)
             {
-                StateHasChanged();
+                familyController.ReplaceOne(Family);
             }
             else
             {
-                if (Edit == true)
-                {
-                    familyController.ReplaceOne(Family);
-                }
-                else
-                {
-                    familyController.Insert(Family);
-                }
-
-                BlazoredModal.Close();
+                familyController.Insert(Family);
             }
+
+            BlazoredModal.Close();
         }
+
         private void Cancel()
         {
             BlazoredModal.Cancel();

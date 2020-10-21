@@ -26,30 +26,15 @@ namespace BlazorApp.Pages
         public int NumberInscriptionToCreateByChild { get; set; }
         public int NumberInscriptionInDatabase { get; set; }
 
-        public DateTime DateUTC { get; set; }
-        public DateTime DateLOC { get; set; }
+        public int CountInscriptions { get; set; }
 
+        public bool Loading { get; set; }
 
         protected override void OnInitialized()
         {
             base.OnInitialized();
-
-            var familyController = new BaseController<Family>();
-            Families = familyController.QueryCollection().ToList();
-            NumberFamilyInDatabase = Families.Count;
-
-            var childController = new BaseController<Child>();
-            Children = childController.QueryCollection().ToList();
-            NumberChildrenInDatabase = Children.Count;
-
-            var parentController = new BaseController<Parent>();
-            Parents = parentController.QueryCollection().ToList();
-            NumberParentInDatabase = Parents.Count;
-
             var inscriptionController = new BaseController<Inscription>();
-            Inscriptions = inscriptionController.QueryCollection().ToList();
-            NumberInscriptionInDatabase = Inscriptions.Count;
-
+            CountInscriptions = inscriptionController.QueryCollection().Count();
         }
 
         public void Drop()
@@ -58,6 +43,18 @@ namespace BlazorApp.Pages
             context.DropDatabase();
             OnInitialized();
             InvokeAsync(StateHasChanged);
+        }
+
+        public void CreateAll()
+        {
+            CreateFamilies();
+            CreateChildren();
+            CreateParents();
+            CreateInscription();
+
+            var inscriptionController = new BaseController<Inscription>();
+            CountInscriptions = inscriptionController.QueryCollection().Count();
+            
         }
 
         public void CreateFamilies()
@@ -138,7 +135,6 @@ namespace BlazorApp.Pages
         public async void CreateInscription()
         {
             var inscriptionController = new BaseController<Inscription>();
-            var childController = new BaseController<Child>();
 
             foreach (var child in Children)
             {
