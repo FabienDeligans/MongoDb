@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using MongoDB.Bson.Serialization.Attributes;
 
 namespace MongoDbCore.Models
 {
@@ -10,6 +12,9 @@ namespace MongoDbCore.Models
         public DateTime Birthday { get; set; }
 
         public string FamilyId { get; set; }
+
+        [BsonIgnore]
+        public IEnumerable<Inscription> Inscriptions { get; set; }
 
         public int Age
         {

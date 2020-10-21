@@ -54,9 +54,9 @@ namespace BlazorApp.Pages
 
             var inscriptionController = new BaseController<Inscription>();
             CountInscriptions = inscriptionController.QueryCollection().Count();
-            
-        }
 
+        }
+        
         public void CreateFamilies()
         {
             var controller = new BaseController<Family>();
@@ -96,6 +96,7 @@ namespace BlazorApp.Pages
                     };
                     listChildren.Add(child);
                 }
+
             }
 
             childController.InsertAll(listChildren);
@@ -124,6 +125,7 @@ namespace BlazorApp.Pages
                     };
                     listParents.Add(parent);
                 }
+
             }
 
             parentController.InsertAll(listParents);
