@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using BlazorApp.Pages.InscriptionPages;
 using Blazored.Modal;
 using Microsoft.AspNetCore.Components;
+using MongoDB.Driver;
 using MongoDbCore.Controller;
 using MongoDbCore.Models;
 using MongoDbCore.Pagination;
@@ -50,7 +51,7 @@ namespace BlazorApp.Pages.Component
 
             if (ChildId != null)
             {
-                FromSearchByChild = true; 
+                FromSearchByChild = true;
                 SearchByChild();
                 InvokeAsync(StateHasChanged);
             }
@@ -115,12 +116,12 @@ namespace BlazorApp.Pages.Component
         public void Pagination(int index)
         {
             Index = index;
-            NumberOfPage = (int)Math.Ceiling(Inscriptions.Count / (double)PageSize); 
+            NumberOfPage = (int)Math.Ceiling(Inscriptions.Count / (double)PageSize);
             PaginatedInscription = PaginatedList<Inscription>.Create(Inscriptions, Index, PageSize);
 
-            MCount = Inscriptions.Count(v => v.M );
-            RCount = Inscriptions.Count(v => v.R );
-            AmCount = Inscriptions.Count(v => v.Am );
+            MCount = Inscriptions.Count(v => v.M);
+            RCount = Inscriptions.Count(v => v.R);
+            AmCount = Inscriptions.Count(v => v.Am);
             StateHasChanged();
         }
 
@@ -146,32 +147,73 @@ namespace BlazorApp.Pages.Component
 
         public void SearchByDate()
         {
-            var inscriptionController = new BaseController<Inscription>();
-            Inscriptions = inscriptionController.QueryCollection().Where(v => v.DayChoose == Date.Date).OrderBy(v => v.DayChoose).ToList();
+            var start = DateTime.Now;
+
             ChildId = null;
+
+            if (DbCall == false)
+            {
+                Inscriptions = new List<Inscription>();
+                foreach (var insc in Children.Select(child => child.Inscriptions.FirstOrDefault(v => v.DayChoose == Date.Date)).Where(insc => insc != null))
+                {
+                    Inscriptions.Add(insc);
+                }
+
+                var inscriptions = Inscriptions.OrderBy(v => v.DayChoose).ToList();
+                Inscriptions = inscriptions; 
+            }
+            else
+            {
+                var inscriptionController = new BaseController<Inscription>();
+                Inscriptions = inscriptionController.QueryCollection().Where(v => v.DayChoose == Date.Date).OrderBy(v => v.DayChoose).ToList();
+            }
+
             Pagination(1);
             FromSearchByDate = true;
             FromSearchByChild = false;
             InvokeAsync(StateHasChanged);
+
+            ElapsedTime = (DateTime.Now - start).TotalMilliseconds;
         }
 
         public void SearchByChild()
         {
-            ChildId = ChildIdSearch ?? ChildId ;
+            var start = DateTime.Now;
 
-            if(ChildId == null) return;
+            ChildId = ChildIdSearch ?? ChildId;
+            if (ChildId == null) return;
 
-            var childController = new BaseController<Child>();
-            Child = childController.QueryCollection().First(v => v.Id == ChildId); 
-            var inscriptionController = new BaseController<Inscription>();
-            Inscriptions = inscriptionController.QueryCollection().Where(v => v.ChildId == ChildId).OrderBy(v => v.DayChoose).ToList();
+            if (DbCall == false)
+            {
+                Child = Children.First(v => v.Id == ChildId);
+                Inscriptions = Child.Inscriptions.OrderBy(v => v.DayChoose).ToList();
+            }
+            else
+            {
+                var childController = new BaseController<Child>();
+                Child = childController.QueryCollection().First(v => v.Id == ChildId); 
+                var inscriptionController = new BaseController<Inscription>();
+                Inscriptions = inscriptionController.QueryCollection().Where(v => v.ChildId == ChildId).OrderBy(v => v.DayChoose).ToList();
+            }
+
             Pagination(1);
             FromSearchByChild = true;
             FromSearchByDate = false;
             InvokeAsync(StateHasChanged);
+
+            ElapsedTime = (DateTime.Now - start).TotalMilliseconds;
         }
+
+        public void AppelDb()
+        {
+            DbCall = !DbCall;
+        }
+
+        public bool DbCall { get; set; }
 
         public string ChildIdSearch { get; set; }
         public DateTime Date { get; set; } = DateTime.Now;
+
+        public double ElapsedTime { get; set; }
     }
 }

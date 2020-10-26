@@ -72,7 +72,7 @@ namespace BlazorApp.Pages
             var start = DateTime.Now;
 
             //UpLinkedList();
-            //UpLinkedListManualy();
+            UpLinkedListManualy();
             
             ElapsedUpdateLinkedList = (DateTime.Now - start).TotalMilliseconds;
 

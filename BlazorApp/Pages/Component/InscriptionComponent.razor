@@ -5,6 +5,10 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-3">
+            <button type="button" class="btn btn-primary" @onclick="@AppelDb">@(DbCall == true? "Appel Db : ON" : "Appel DB : OFF")</button>
+            <div>elapsed Time Query : @ElapsedTime ms</div>
+        </div>
+        <div class="col-md-3">
             <div class="input-group">
                 <input type="date" @bind="@Date" />
                 <button type="button" class="btn btn-primary" @onclick="@SearchByDate">Search By Date</button>
@@ -22,7 +26,7 @@
                 <button type="button" class="btn btn-primary" @onclick="@SearchByChild">Search By Child</button>
             </div>
         </div>
-        <div class="col-md-6" align="right">
+        <div class="col-md-3" align="right">
             <button type="button" class="btn btn-primary" @onclick="@Create">Insert</button>
         </div>
     </div>

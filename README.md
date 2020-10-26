@@ -60,3 +60,9 @@ Afin de manipuler les entités, un seul contrôleur générique est nécessaire 
 
 
 
+<img src="./capture/editInscription2.png">
+
+Dans le cadre des **Entités Embedded**, la page ``Inscription`` permet de visualiser le temps de réponse avec ou sans appel à la base de données. 
+
+``ElapsedTime `` correspond au temps que met la page afin de charger les inscriptions soit en faisant des appel en base de données soit en utilisant les données embedded. 
+
