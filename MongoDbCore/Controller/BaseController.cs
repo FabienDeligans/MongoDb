@@ -110,16 +110,15 @@ namespace MongoDbCore.Controller
         public void UpdateLinkedLists(T entity)
         {
             var toUpdate = GetLinkedList(entity);
-
             foreach (var (type, listEntity) in toUpdate)
             {
                 foreach (var entity1 in listEntity)
                 {
                     var property = type.GetProperties().First(v => v.PropertyType == typeof(IEnumerable<T>));
 
-                    var listToUpdate = (List<T>)property.GetValue(entity1);
+                    var listToUpdate = (List<T>)property.GetValue(entity1) ?? new List<T>();
 
-                    if (!listToUpdate!.Select(v => v.Id).Contains(entity.Id))
+                    if (!listToUpdate.Select(v => v.Id).Contains(entity.Id))
                     {
                         listToUpdate.Add(entity);
                     }
@@ -132,6 +131,38 @@ namespace MongoDbCore.Controller
                     var methodInfo = genericTypeController.GetMethod(nameof(Update));
                     methodInfo?.Invoke(genericController, new object[] { entity1, property.Name, listToUpdate });
 
+                    if (GetLinkedList(entity) == null) continue;
+                    methodInfo = genericTypeController.GetMethod(nameof(UpdateLinkedLists));
+                    methodInfo?.Invoke(genericController, new object[] { entity1 });
+                }
+            }
+        }
+
+        public void DeleteLinkedList(T entity)
+        {
+            var toUpdate = GetLinkedList(entity);
+            foreach (var (type, listEntity) in toUpdate)
+            {
+                foreach (var entity1 in listEntity)
+                {
+                    var property = type.GetProperties().First(v => v.PropertyType == typeof(IEnumerable<T>));
+
+                    var listToUpdate = (List<T>)property.GetValue(entity1) ?? new List<T>();
+
+                    if (!listToUpdate.Select(v => v.Id).Contains(entity.Id))
+                    {
+                        return;
+                    }
+
+                    listToUpdate.Remove(listToUpdate.First(v => v.Id == entity.Id));
+                    var genericTypeController = typeof(BaseController<>).MakeGenericType(type);
+                    var genericController = Activator.CreateInstance(genericTypeController);
+                    var methodInfo = genericTypeController.GetMethod(nameof(Update));
+                    methodInfo?.Invoke(genericController, new object[] { entity1, property.Name, listToUpdate });
+
+                    if (GetLinkedList(entity) == null) continue;
+                    methodInfo = genericTypeController.GetMethod(nameof(UpdateLinkedLists));
+                    methodInfo?.Invoke(genericController, new object[] { entity1 });
                 }
             }
         }

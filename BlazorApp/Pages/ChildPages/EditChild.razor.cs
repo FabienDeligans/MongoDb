@@ -46,12 +46,14 @@ namespace BlazorApp.Pages.ChildPages
             if (Edit)
             {
                 childController.ReplaceOne(Child);
+                childController.UpdateLinkedLists(Child);
             }
             else
             {
                 childController.Insert(Child);
+                childController.UpdateLinkedLists(Child);
             }
-                
+
             BlazoredModal.Close();
         }
 

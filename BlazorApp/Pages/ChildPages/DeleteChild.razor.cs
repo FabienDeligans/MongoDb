@@ -28,6 +28,7 @@ namespace BlazorApp.Pages.ChildPages
             var childController = new BaseController<Child>();
             var inscriptionController = new BaseController<Inscription>();
 
+            childController.DeleteLinkedList(Child);
             inscriptionController.RemoveAll(v => v.ChildId == ChildId);
             childController.RemoveAll(v => v.Id == ChildId);
 

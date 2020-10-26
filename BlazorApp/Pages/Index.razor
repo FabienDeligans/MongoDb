@@ -8,34 +8,36 @@
 
     <div class="row"><p></p> </div>
 
-    <div class="row col-md-3">
-        <label for="numberFamilyToCreate">Number of family to create</label>
+    <div class="row col-lg-3">
+        <label for="numberFamilyToCreate"><b>Number of family to create</b></label>
         <input type="number" class="form-control" id="numberFamilyToCreate" @bind="NumberFamilyToCreate" />
+        <div>Number TOTAL of families in database : @NumberFamilyInDatabase</div>
     </div>
-
-    <div class="row col-md-3">
-        <label for="numberChildrenToCreate">Number of Children by Family to create</label>
-        <input type="number" class="form-control" id="numberChildrenToCreate" @bind="NumberChildToCreateByFamily" />
-    </div>
-
-    <div class="row col-md-3">
-        <label for="numberParentToCreate">Number of Parent by Family to create</label>
-        <input type="number" class="form-control" id="numberParentToCreate" @bind="NumberParentToCreateByFamily" />
-    </div>
-
-    <div class="row col-md-3">
-        <label for="numberInscriptionToCreate">Number of Inscription by Child to create</label>
-        <input type="number" class="form-control" id="numberInscriptionToCreate" @bind="NumberInscriptionToCreateByChild" />
-    </div>
-
     <div class="row"><p></p> </div>
-
-    <div class="row col-md-3">
+    <div class="row col-lg-3">
+        <label for="numberChildrenToCreate"><b>Number of Children by Family to create</b></label>
+        <input type="number" class="form-control" id="numberChildrenToCreate" @bind="NumberChildToCreateByFamily" />
+        <div>Number TOTAL of children in database : @NumberChildrenInDatabase</div>
+    </div>
+    <div class="row"><p></p> </div>
+    <div class="row col-lg-3">
+        <label for="numberParentToCreate"><b>Number of Parent by Family to create</b></label>
+        <input type="number" class="form-control" id="numberParentToCreate" @bind="NumberParentToCreateByFamily" />
+        <div>Number TOTAL of parents in database : @NumberParentInDatabase</div>
+    </div>
+    <div class="row"><p></p> </div>
+    <div class="row col-lg-3">
+        <label for="numberInscriptionToCreate"><b>Number maximum of Inscription by Child to create (random build)</b></label>
+        <input type="number" class="form-control" id="numberInscriptionToCreate" @bind="NumberInscriptionToCreateByChild" />
+        <div>Number TOTAL of inscriptions in database : @NumberInscriptionInDatabase</div>
+    </div>
+    <div class="row"><p></p> </div>
+    <div class="row col-lg-3">
         <button type="submit" class="btn btn-primary" @onclick="CreateAll">Submit</button>
     </div>
-
-    <div class="row col-md-3">
-        <div>Number TOTAL of inscriptions in database : @CountInscriptions</div>
+    <div class="row"><p></p> </div>
+    <div class="row col-lg-3">
+        <div>Duration for UpdateLinkedList : @ElapsedUpdateLinkedList ms</div>
     </div>
 </div>
 

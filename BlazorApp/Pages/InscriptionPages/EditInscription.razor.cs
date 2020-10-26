@@ -25,7 +25,7 @@ namespace BlazorApp.Pages.InscriptionPages
             base.OnInitialized();
             var inscriptionController = new BaseController<Inscription>();
             var childController = new BaseController<Child>();
-            Children = childController.QueryCollection().ToList(); 
+            Children = childController.QueryCollection().ToList();
 
             if (InscriptionId != null)
             {
@@ -41,7 +41,7 @@ namespace BlazorApp.Pages.InscriptionPages
         public void Save()
         {
             var inscriptionController = new BaseController<Inscription>();
-
+            
             if (Inscription.ChildId == null)
             {
                 StateHasChanged();
@@ -52,10 +52,13 @@ namespace BlazorApp.Pages.InscriptionPages
                 if (Edit)
                 {
                     inscriptionController.ReplaceOne(Inscription);
+                    inscriptionController.UpdateLinkedLists(Inscription);
+
                 }
                 else
                 {
                     inscriptionController.Insert(Inscription);
+                    inscriptionController.UpdateLinkedLists(Inscription);
                 }
 
                 BlazoredModal.Close();

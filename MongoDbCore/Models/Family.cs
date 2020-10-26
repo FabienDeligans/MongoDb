@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using MongoDB.Bson.Serialization.Attributes;
 
 namespace MongoDbCore.Models
 {
@@ -7,10 +6,8 @@ namespace MongoDbCore.Models
     {
         public string FamilyName { get; set; }
 
-        [BsonIgnore]
-        public IEnumerable<Parent> Parents { get; set; }
+        public IEnumerable<Parent> Parents { get; set; } = new List<Parent>();
 
-        [BsonIgnore]
-        public IEnumerable<Child> Children { get; set; }
+        public IEnumerable<Child> Children { get; set; } = new List<Child>();
     }
 }

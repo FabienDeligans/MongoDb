@@ -27,6 +27,7 @@ namespace BlazorApp.Pages.InscriptionPages
         {
             var inscriptionController = new BaseController<Inscription>();
 
+            inscriptionController.DeleteLinkedList(Inscription);
             inscriptionController.RemoveAll(v => v.Id == InscriptionId);
 
             BlazoredModal.Close();

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using MongoDB.Bson.Serialization.Attributes;
 
 namespace MongoDbCore.Models
 {
@@ -13,8 +12,7 @@ namespace MongoDbCore.Models
 
         public string FamilyId { get; set; }
 
-        [BsonIgnore]
-        public IEnumerable<Inscription> Inscriptions { get; set; }
+        public IEnumerable<Inscription> Inscriptions { get; set; } = new List<Inscription>();
 
         public int Age
         {

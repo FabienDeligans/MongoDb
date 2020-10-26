@@ -36,8 +36,8 @@
             }
             @if (FromSearchByDate)
             {
-                <div align="center"><h2><b>Inscriptions for : @Date.Date.ToLongDateString()</b></h2></div>
-                <div align="center"><b>Number of Inscription for This Data : @Inscriptions.Count()</b></div>
+                <div align="center"><h2><b>Inscriptions for : @Inscriptions.First().DayChoose.Date.ToLongDateString()</b></h2></div>
+                <div align="center"><b>Number of Inscription for This Date : @Inscriptions.Count() - Max : @Max</b></div>
             }
             <p></p>
         </div>
@@ -53,15 +53,15 @@
                 </th>
                 <th>
                     <div align="center">M</div>
-                    <div align="center">@MCount</div>
+                    <div align="center" style="background-color:@(MCount>Max && FromSearchByDate ? "red" : null)">@MCount</div>
                 </th>
                 <th>
                     <div align="center">R</div>
-                    <div align="center">@RCount</div>
+                    <div align="center" style="background-color:@(RCount>Max && FromSearchByDate ? "red" : null)">@RCount</div>
                 </th>
                 <th>
                     <div align="center">Am</div>
-                    <div align="center">@AmCount</div>
+                    <div align="center" style="background-color:@(AmCount>Max && FromSearchByDate ? "red" : null)">@AmCount</div>
                 </th>
                 <th>
                     <div align="center">Child</div>

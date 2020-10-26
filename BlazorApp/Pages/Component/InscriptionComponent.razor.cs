@@ -34,6 +34,7 @@ namespace BlazorApp.Pages.Component
         public bool FromSearchByDate { get; set; }
         public bool FromSearchByChild { get; set; }
 
+        public int Max { get; set; } = 30;
 
         protected override void OnParametersSet()
         {
@@ -98,7 +99,16 @@ namespace BlazorApp.Pages.Component
 
             if (!result.Cancelled)
             {
-                OnInitialized();
+                if (FromSearchByDate)
+                {
+                    SearchByDate();
+                }
+
+                if (FromSearchByChild)
+                {
+                    SearchByChild();
+                }
+                await InvokeAsync(StateHasChanged);
             }
         }
 
@@ -121,7 +131,15 @@ namespace BlazorApp.Pages.Component
 
             if (!result.Cancelled)
             {
-                OnInitialized();
+                if (FromSearchByDate)
+                {
+                    SearchByDate();
+                }
+
+                if (FromSearchByChild)
+                {
+                    SearchByChild();
+                }
                 await InvokeAsync(StateHasChanged);
             }
         }

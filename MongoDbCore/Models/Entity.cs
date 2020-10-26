@@ -7,6 +7,6 @@ namespace MongoDbCore.Models
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
-        public string Id { get;}
+        public string Id { get; set; }
     }
 }
