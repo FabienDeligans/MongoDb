@@ -182,10 +182,11 @@ namespace BlazorApp.Pages.Component
 
             ChildId = ChildIdSearch ?? ChildId;
             if (ChildId == null) return;
+            if (Children == null) DbCall = true;
 
             if (DbCall == false)
             {
-                Child = Children.First(v => v.Id == ChildId);
+                Child = Children.FirstOrDefault(v => v.Id == ChildId);
                 Inscriptions = Child.Inscriptions.OrderBy(v => v.DayChoose).ToList();
             }
             else
